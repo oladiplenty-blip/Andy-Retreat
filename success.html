@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservation Confirmed — Ensidor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cream: #F7F5F0;
+            --white: #FFFFFF;
+            --charcoal: #2C2C2C;
+            --sage: #6B7F5E;
+            --sage-light: #E8EDE5;
+            --gray: #6B6B6B;
+            --light-gray: #E5E5E5;
+            --error: #B85C5C;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            color: var(--charcoal);
+            background: linear-gradient(135deg, var(--sage-light) 0%, var(--cream) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        h1, h2 { font-family: 'Cormorant Garamond', serif; font-weight: 400; }
+        .card {
+            background: var(--white);
+            max-width: 560px;
+            width: 100%;
+            padding: 3.5rem 3rem;
+            text-align: center;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.08);
+        }
+        .icon {
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            background: var(--sage-light);
+            color: var(--sage);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.75rem;
+            margin: 0 auto 1.5rem;
+        }
+        h1 { font-size: 2.25rem; margin-bottom: 1rem; }
+        p { color: var(--gray); line-height: 1.7; margin-bottom: 0.5rem; }
+        .status {
+            margin-top: 2rem;
+            padding: 1rem 1.25rem;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+        .status.loading { background: var(--cream); color: var(--gray); }
+        .status.ok { background: var(--sage-light); color: var(--sage); }
+        .status.error { background: #FBEAEA; color: var(--error); }
+        .reference { font-size: 0.8rem; color: var(--gray); margin-top: 1rem; letter-spacing: 1px; }
+        a.btn {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.9rem 2.25rem;
+            background: var(--charcoal);
+            color: var(--white);
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="icon">✓</div>
+        <h1>You're all set.</h1>
+        <p>Thank you for reserving your place at the Ensidor Leadership Retreat.</p>
+        <p>A confirmation email will follow shortly. If you have any questions in the meantime, reach us at hello@ensidor.com.</p>
+
+        <div class="status loading" id="statusBox">Logging your reservation…</div>
+        <p class="reference" id="referenceLine"></p>
+
+        <a href="index.html" class="btn">Return to Site</a>
+    </div>
+
+    <script>
+        // Sign up at https://formspree.io, create a form, and paste its ID
+        // below (the part after /f/ in your form's endpoint URL).
+        // This is the ONLY place Formspree is called from — once, here,
+        // after the customer has completed payment.
+        const FORMSPREE_FORM_ID = 'YOUR_FORM_ID';
+        const FORMSPREE_ENDPOINT = `https://formspree.io/f/${FORMSPREE_FORM_ID}`;
+
+        const statusBox = document.getElementById('statusBox');
+        const referenceLine = document.getElementById('referenceLine');
+
+        function getQueryParam(name) {
+            return new URLSearchParams(window.location.search).get(name);
+        }
+
+        async function confirmBooking() {
+            // Stripe appends this when your Payment Link's "after payment"
+            // redirect URL includes {CHECKOUT_SESSION_ID} — see setup notes.
+            const sessionId = getQueryParam('session_id');
+
+            let booking = null;
+            try {
+                const raw = localStorage.getItem('ensidor_pending_booking');
+                if (raw) booking = JSON.parse(raw);
+            } catch (e) {
+                console.warn('Could not read saved booking:', e);
+            }
+
+            if (!booking) {
+                // Customer likely opened this link directly, on another device,
+                // or cleared storage — we can still log what we know.
+                booking = {
+                    reference: getQueryParam('ref') || 'UNKNOWN',
+                    name: '(not available — booking record not found locally)',
+                    email: '(not available)'
+                };
+            }
+
+            // This page confirms the customer reached Stripe and returned —
+            // it does NOT cryptographically verify the charge. Please check
+            // the Stripe Dashboard for this Checkout Session ID / reference
+            // before treating the seat as confirmed.
+            booking.status = sessionId
+                ? 'Reached Success Page — verify payment manually in Stripe'
+                : 'Reached Success Page — no Stripe session ID present, verify manually';
+            booking.stripeSessionId = sessionId || 'n/a';
+            booking.confirmedAt = new Date().toISOString();
+            booking._subject = `New Reservation — Please Verify Payment — ${booking.name || 'Unknown'}`;
+
+            referenceLine.textContent = `Reference: ${booking.reference}`;
+
+            try {
+                const res = await fetch(FORMSPREE_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(booking)
+                });
+                if (!res.ok) throw new Error(`Formspree responded ${res.status}`);
+                statusBox.textContent = 'Reservation confirmed and logged.';
+                statusBox.className = 'status ok';
+                localStorage.removeItem('ensidor_pending_booking');
+            } catch (err) {
+                console.error('Could not log confirmation to Formspree:', err);
+                statusBox.textContent = "Your payment went through, but we couldn't sync it automatically — please email hello@ensidor.com with your reference number.";
+                statusBox.className = 'status error';
+            }
+        }
+
+        confirmBooking();
+    </script>
+</body>
+</html>

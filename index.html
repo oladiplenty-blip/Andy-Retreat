@@ -1,0 +1,1740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ensidor — Leadership Retreat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cream: #F7F5F0;
+            --white: #FFFFFF;
+            --charcoal: #2C2C2C;
+            --sage: #6B7F5E;
+            --sage-light: #E8EDE5;
+            --taupe: #B8956A;
+            --taupe-light: #F0E6D6;
+            --gray: #6B6B6B;
+            --light-gray: #E5E5E5;
+            --error: #B85C5C;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            color: var(--charcoal);
+            background-color: var(--cream);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 400;
+            line-height: 1.2;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1.5rem 3rem;
+            transition: all 0.5s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav.scrolled {
+            background: rgba(247, 245, 240, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 3rem;
+            box-shadow: 0 1px 20px rgba(0,0,0,0.05);
+        }
+
+        body.page-about nav { --nav-text: #FFFFFF; }
+        body.page-about nav.scrolled { --nav-text: var(--charcoal); background: rgba(247, 245, 240, 0.95); }
+
+        nav .logo, nav .nav-links a { color: var(--nav-text, var(--charcoal)); }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 500;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-size: 0.85rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            position: relative;
+            padding-bottom: 4px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--sage);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+        .nav-links a.active { color: var(--sage); }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 24px;
+            height: 1px;
+            background: var(--nav-text, var(--charcoal));
+            margin: 6px 0;
+            transition: 0.3s;
+        }
+
+        /* Page Container */
+        .page {
+            display: none;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .page.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--sage-light) 100%);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236B7F5E' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+        }
+
+        .hero-pretitle {
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--sage);
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: slideUp 0.8s ease forwards 0.2s;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 300;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: slideUp 0.8s ease forwards 0.4s;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: var(--gray);
+            margin-bottom: 2rem;
+            font-weight: 300;
+            opacity: 0;
+            animation: slideUp 0.8s ease forwards 0.6s;
+        }
+
+        .hero-meta {
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            color: var(--gray);
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            animation: slideUp 0.8s ease forwards 0.8s;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: var(--charcoal);
+            color: var(--white);
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border: 1px solid var(--charcoal);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            opacity: 0;
+            animation: slideUp 0.8s ease forwards 1s;
+        }
+
+        .btn:hover {
+            background: transparent;
+            color: var(--charcoal);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--charcoal);
+            margin-left: 1rem;
+        }
+
+        .btn-outline:hover { background: var(--charcoal); color: var(--white); }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Sections - FULL WIDTH backgrounds, centered content */
+        section { padding: 6rem 2rem; }
+
+        .container { max-width: 1000px; margin: 0 auto; }
+        .container-narrow { max-width: 700px; margin: 0 auto; }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 1rem;
+            font-weight: 400;
+        }
+
+        .section-header p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .divider {
+            width: 40px;
+            height: 1px;
+            background: var(--taupe);
+            margin: 2rem auto;
+        }
+
+        /* Opening Section */
+        .opening { background: var(--white); }
+
+        .opening-content { text-align: center; }
+
+        .opening-content p {
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 300;
+            line-height: 1.6;
+            color: var(--charcoal);
+        }
+
+        /* Who Is It For */
+        .who-for { background: var(--cream); }
+
+        .who-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .who-card {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .who-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--sage);
+        }
+
+        .who-card p { color: var(--gray); font-size: 0.95rem; }
+
+        /* Experience Preview */
+        .experience-preview { background: var(--white); }
+
+        .exp-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .exp-card {
+            padding: 2.5rem 2rem;
+            border: 1px solid var(--light-gray);
+            text-align: center;
+            transition: all 0.4s ease;
+            background: var(--white);
+        }
+
+        .exp-card:hover {
+            border-color: var(--sage);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        }
+
+        .exp-card h4 { font-size: 1.25rem; margin-bottom: 0.75rem; }
+        .exp-card p { font-size: 0.9rem; color: var(--gray); }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            max-width: 700px;
+            margin: 4rem auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: var(--light-gray);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 3rem;
+            padding-bottom: 3rem;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.6s ease;
+        }
+
+        .timeline-item.visible { opacity: 1; transform: translateX(0); }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -5px;
+            top: 0.5rem;
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            background: var(--sage);
+            border: 2px solid var(--cream);
+        }
+
+        .timeline-time {
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--taupe);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .timeline-item h4 { font-size: 1.4rem; margin-bottom: 0.5rem; }
+        .timeline-item p { color: var(--gray); font-size: 0.95rem; }
+
+        /* Included Grid */
+        .included-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .included-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: var(--cream);
+        }
+
+        .included-item::before {
+            content: '—';
+            color: var(--sage);
+            font-weight: 500;
+            line-height: 1.7;
+        }
+
+        .included-item p { font-size: 0.95rem; }
+
+        /* Quote Break */
+        .quote-break {
+            background: var(--charcoal);
+            color: var(--white);
+            padding: 8rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quote-break::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(107,127,94,0.1) 0%, transparent 70%);
+        }
+
+        .quote-break-content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .quote-break h2 {
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-weight: 300;
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        /* Leave With */
+        .leave-with { background: var(--white); }
+
+        .leave-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .leave-item {
+            padding: 2rem;
+            border-left: 2px solid var(--sage-light);
+            transition: all 0.3s ease;
+        }
+
+        .leave-item:hover {
+            border-left-color: var(--sage);
+            background: var(--cream);
+        }
+
+        .leave-item p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.25rem;
+            font-weight: 400;
+        }
+
+        /* Investment */
+        .investment-card {
+            max-width: 500px;
+            margin: 3rem auto;
+            padding: 3rem;
+            border: 1px solid var(--light-gray);
+            text-align: center;
+            background: var(--white);
+        }
+
+        .price {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5rem;
+            font-weight: 400;
+            color: var(--charcoal);
+            margin: 1rem 0;
+        }
+
+        .price-note {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+
+        /* Testimonial */
+        .testimonial {
+            background: var(--sage-light);
+            padding: 4rem;
+            max-width: 700px;
+            margin: 4rem auto;
+            text-align: center;
+            position: relative;
+        }
+
+        .testimonial::before {
+            content: '"';
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 6rem;
+            color: var(--sage);
+            opacity: 0.3;
+            position: absolute;
+            top: 1rem;
+            left: 2rem;
+            line-height: 1;
+        }
+
+        .testimonial p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-style: italic;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial cite {
+            font-style: normal;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gray);
+        }
+
+        /* FAQ */
+        .faq { max-width: 700px; margin: 0 auto; }
+
+        .faq-item { border-bottom: 1px solid var(--light-gray); margin-bottom: 0; }
+
+        .faq-question {
+            width: 100%;
+            padding: 1.5rem 0;
+            background: none;
+            border: none;
+            text-align: left;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--charcoal);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: color 0.3s;
+        }
+
+        .faq-question:hover { color: var(--sage); }
+
+        .faq-icon {
+            font-size: 1.5rem;
+            font-weight: 300;
+            transition: transform 0.3s ease;
+            color: var(--taupe);
+        }
+
+        .faq-item.open .faq-icon { transform: rotate(45deg); }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 300px;
+            padding-bottom: 1.5rem;
+        }
+
+        .faq-answer p { color: var(--gray); font-size: 0.95rem; line-height: 1.7; }
+
+        /* Closing CTA */
+        .closing {
+            background: linear-gradient(135deg, var(--sage-light) 0%, var(--cream) 100%);
+            text-align: center;
+            padding: 8rem 2rem;
+        }
+
+        .closing h2 {
+            font-size: clamp(1.75rem, 3vw, 2.5rem);
+            margin-bottom: 1.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .closing p {
+            color: var(--gray);
+            margin-bottom: 2.5rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* About Page */
+        .about-hero {
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--charcoal);
+            color: var(--white);
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .about-hero h1 { font-size: clamp(2.5rem, 5vw, 4rem); }
+
+        .about-content {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 6rem 2rem;
+        }
+
+        .about-content p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: var(--gray);
+        }
+
+        .about-content p.lead {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            color: var(--charcoal);
+            font-weight: 400;
+        }
+
+        .contact-info {
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .contact-info h3 { margin-bottom: 1.5rem; }
+
+        .contact-detail { margin-bottom: 0.75rem; color: var(--gray); }
+
+        /* Footer */
+        footer {
+            background: var(--charcoal);
+            color: var(--white);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        footer p { font-size: 0.85rem; opacity: 0.7; letter-spacing: 1px; }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--cream);
+            z-index: 999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .mobile-menu.open { display: flex; }
+
+        .mobile-menu a {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            color: var(--charcoal);
+            text-decoration: none;
+        }
+
+        .close-menu {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--charcoal);
+        }
+
+        /* ==================== CHECKOUT MODAL ==================== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(44, 44, 44, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1rem;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.open { display: flex; }
+
+        .modal {
+            background: var(--white);
+            width: 100%;
+            max-width: 640px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalIn 0.35s ease;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.2);
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: translateY(30px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .modal-header {
+            padding: 2rem 2.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 1.75rem;
+            font-weight: 400;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.75rem;
+            cursor: pointer;
+            color: var(--gray);
+            line-height: 1;
+            padding: 0.25rem;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover { color: var(--charcoal); }
+
+        .modal-body {
+            padding: 1.5rem 2.5rem 2.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+            font-weight: 400;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="tel"],
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 1px solid var(--light-gray);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            color: var(--charcoal);
+            background: var(--white);
+            transition: border-color 0.3s;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--sage);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .checkbox-group {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--sage);
+            margin-top: 2px;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            font-size: 0.85rem;
+            color: var(--gray);
+            line-height: 1.5;
+            cursor: pointer;
+        }
+
+        .checkbox-group label a {
+            color: var(--sage);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        .checkbox-group label a:hover { color: var(--charcoal); }
+
+        .form-error {
+            color: var(--error);
+            font-size: 0.8rem;
+            margin-top: 0.35rem;
+            display: none;
+        }
+
+        .form-group.has-error input,
+        .form-group.has-error textarea,
+        .form-group.has-error select {
+            border-color: var(--error);
+        }
+
+        .form-group.has-error .form-error { display: block; }
+
+        .modal-footer {
+            padding: 0 2.5rem 2.5rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-full {
+            width: 100%;
+            text-align: center;
+            opacity: 1;
+            animation: none;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--charcoal);
+            margin-right: auto;
+        }
+
+        .btn-secondary:hover { background: var(--light-gray); }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Step 2 Summary */
+        .summary-card {
+            background: var(--cream);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-left: 3px solid var(--sage);
+        }
+
+        .summary-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-meta {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        .summary-meta strong {
+            color: var(--charcoal);
+            font-weight: 500;
+        }
+
+        .summary-desc {
+            font-size: 0.95rem;
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .summary-list {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .summary-list li {
+            padding: 0.4rem 0;
+            font-size: 0.9rem;
+            color: var(--charcoal);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .summary-list li::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--sage);
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .summary-price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .summary-price {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 500;
+        }
+
+        .summary-note {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 0.5rem;
+        }
+
+        .step-indicator {
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--taupe);
+            margin-bottom: 1.5rem;
+        }
+
+        .submit-error-banner {
+            display: none;
+            background: #FBEAEA;
+            border: 1px solid var(--error);
+            color: var(--error);
+            padding: 0.85rem 1rem;
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .submit-error-banner.show { display: block; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav { padding: 1rem 1.5rem; }
+            .nav-links { display: none; }
+            .mobile-menu-btn { display: block; }
+            section { padding: 4rem 1.5rem; }
+            .testimonial { padding: 3rem 1.5rem; }
+            .investment-card { padding: 2rem 1.5rem; }
+            .btn-outline { margin-left: 0; margin-top: 1rem; }
+
+            .modal-header,
+            .modal-body,
+            .modal-footer { padding-left: 1.5rem; padding-right: 1.5rem; }
+            .form-row { grid-template-columns: 1fr; }
+        }
+
+        /* Scroll reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <a href="#home" class="logo">Ensidor</a>
+        <ul class="nav-links">
+            <li><a href="#home" class="nav-link active" data-page="home">Home</a></li>
+            <li><a href="#experience" class="nav-link" data-page="experience">Experience</a></li>
+            <li><a href="#investment" class="nav-link" data-page="investment">Investment</a></li>
+            <li><a href="#about" class="nav-link" data-page="about">About</a></li>
+        </ul>
+        <button class="mobile-menu-btn" onclick="toggleMenu()" aria-label="Open menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="close-menu" onclick="toggleMenu()" aria-label="Close menu">×</button>
+        <a href="#home" onclick="toggleMenu()">Home</a>
+        <a href="#experience" onclick="toggleMenu()">Experience</a>
+        <a href="#investment" onclick="toggleMenu()">Investment</a>
+        <a href="#about" onclick="toggleMenu()">About</a>
+    </div>
+
+    <!-- ==================== CHECKOUT MODAL ==================== -->
+    <div class="modal-overlay" id="checkoutModal" onclick="closeModalOnBackdrop(event)">
+        <div class="modal" onclick="event.stopPropagation()">
+            <!-- STEP 1: INFORMATION -->
+            <div id="checkoutStep1">
+                <div class="modal-header">
+                    <h2>Reserve Your Place</h2>
+                    <button class="modal-close" onclick="closeCheckout()" aria-label="Close">×</button>
+                </div>
+                <div class="modal-body">
+                    <p class="step-indicator">Step 1 of 2 — Your Information</p>
+                    <form id="checkoutForm" novalidate>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="cName">Full Name *</label>
+                                <input type="text" id="cName" name="name" required>
+                                <span class="form-error">Please enter your full name.</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="cEmail">Email Address *</label>
+                                <input type="email" id="cEmail" name="email" required>
+                                <span class="form-error">Please enter a valid email address.</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cPhone">Telephone Number *</label>
+                            <input type="tel" id="cPhone" name="phone" required placeholder="(555) 123-4567">
+                            <span class="form-error">Please enter your telephone number.</span>
+                        </div>
+
+                        <div style="margin: 2rem 0 1.5rem;">
+                            <p style="font-size: 0.8rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray); margin-bottom: 1rem;">Billing Information</p>
+                            <div class="form-group">
+                                <label for="cAddress">Street Address *</label>
+                                <input type="text" id="cAddress" name="address" required>
+                                <span class="form-error">Required.</span>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="cCity">City *</label>
+                                    <input type="text" id="cCity" name="city" required>
+                                    <span class="form-error">Required.</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cProvince">Province / State *</label>
+                                    <input type="text" id="cProvince" name="province" required>
+                                    <span class="form-error">Required.</span>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="cPostal">Postal / Zip Code *</label>
+                                    <input type="text" id="cPostal" name="postal" required>
+                                    <span class="form-error">Required.</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cCountry">Country *</label>
+                                    <input type="text" id="cCountry" name="country" value="Canada" required>
+                                    <span class="form-error">Required.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cDietary">Dietary Restrictions</label>
+                            <textarea id="cDietary" name="dietary" placeholder="Allergies, intolerances, preferences..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cAccessibility">Accessibility Requests</label>
+                            <textarea id="cAccessibility" name="accessibility" placeholder="Let us know how we can accommodate you..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cReferral">How did you hear about Ensidor? *</label>
+                            <select id="cReferral" name="referral" required>
+                                <option value="" disabled selected>Select an option</option>
+                                <option value="instagram">Instagram</option>
+                                <option value="linkedin">LinkedIn</option>
+                                <option value="friend">Friend or Colleague</option>
+                                <option value="search">Search Engine</option>
+                                <option value="event">Previous Event</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <span class="form-error">Please select an option.</span>
+                        </div>
+
+                        <div style="margin-top: 2rem;">
+                            <p style="font-size: 0.8rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray); margin-bottom: 1rem;">Agreements *</p>
+
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="cCancel" name="agreeCancel" required>
+                                <label for="cCancel">I have read and agree to the <a href="#" onclick="event.preventDefault(); alert('Cancellation policy placeholder — replace with your policy.')">Cancellation Policy</a>.</label>
+                            </div>
+
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="cTerms" name="agreeTerms" required>
+                                <label for="cTerms">I have read and agree to the <a href="#" onclick="event.preventDefault(); alert('Terms of Service placeholder — replace with your terms.')">Terms of Service</a> and <a href="#" onclick="event.preventDefault(); alert('Privacy Policy placeholder — replace with your policy.')">Privacy Policy</a>.</label>
+                            </div>
+
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="cParticipant" name="agreeParticipant" required>
+                                <label for="cParticipant">I agree to the <a href="#" onclick="event.preventDefault(); alert('Participant conditions placeholder — replace with your conditions.')">Participant Conditions</a> and understand this retreat is not a substitute for medical or psychological care.</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-full" onclick="goToStep2()">Continue</button>
+                </div>
+            </div>
+
+            <!-- STEP 2: SUMMARY -->
+            <div id="checkoutStep2" style="display: none;">
+                <div class="modal-header">
+                    <h2>Confirm Your Reservation</h2>
+                    <button class="modal-close" onclick="closeCheckout()" aria-label="Close">×</button>
+                </div>
+                <div class="modal-body">
+                    <p class="step-indicator">Step 2 of 2 — Order Summary</p>
+
+                    <div class="summary-card">
+                        <h3>The Retreat</h3>
+                        <p class="summary-meta">
+                            <strong>Sunday, September 20, 2026</strong><br>
+                            9:00 AM – 5:00 PM<br>
+                            RECESS, Montréal
+                        </p>
+                        <p class="summary-desc">
+                            A private one-day retreat for entrepreneurs, combining guided hypnosis, breathwork, meditation, nourishing food, reflection, and meaningful connection.
+                        </p>
+
+                        <ul class="summary-list">
+                            <li>Guided hypnosis experience</li>
+                            <li>Breathwork workshop</li>
+                            <li>Meditation and integration session</li>
+                            <li>Chef-curated catering by Chef Mous</li>
+                            <li>Snacks and refreshments</li>
+                            <li>Access to retreat amenities</li>
+                            <li>Welcome gift and reflection materials</li>
+                        </ul>
+
+                        <div class="summary-price-row">
+                            <span style="font-size: 0.9rem; color: var(--gray);">One Retreat Pass</span>
+                            <span class="summary-price">$299 CAD</span>
+                        </div>
+                        <p class="summary-note">Limited to 20 participants.</p>
+                    </div>
+
+                    <p style="font-size: 0.85rem; color: var(--gray); line-height: 1.6;">
+                        By continuing to payment, you confirm that the information provided is accurate and you agree to the policies outlined above. You will be redirected to our secure Stripe checkout to complete your reservation.
+                    </p>
+                </div>
+                <div class="modal-footer" style="justify-content: space-between;">
+                    <button class="btn btn-secondary" onclick="goToStep1()">← Back</button>
+                    <button class="btn" id="continueToPaymentBtn" onclick="proceedToPayment()" style="opacity:1; animation:none;">Continue to Payment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE: HOME -->
+    <div class="page active" id="page-home">
+        <section class="hero">
+            <div class="hero-content">
+                <p class="hero-pretitle">Ensidor Presents</p>
+                <h1>The Retreat</h1>
+                <p class="hero-subtitle">One day to step away from the pressure—and return with greater clarity.</p>
+                <p class="hero-meta">[Date] · RECESS, Montréal · 9:00 AM–5:00 PM</p>
+                <a href="#" class="btn" onclick="openCheckout(event)" style="animation-delay: 1s;">Reserve Your Place</a>
+            </div>
+        </section>
+
+        <section class="opening">
+            <div class="container-narrow opening-content reveal">
+                <p>You may be succeeding on the outside while privately feeling stretched, disconnected, or unable to slow down.</p>
+                <div class="divider"></div>
+                <p>This one-day retreat offers a quiet interruption—a space to regulate your nervous system, reconnect with yourself, and experience what leadership can feel like without constant pressure.</p>
+            </div>
+        </section>
+
+        <section class="who-for">
+            <div class="container">
+                <div class="section-header reveal">
+                    <h2>Who This Is For</h2>
+                    <p>For the person behind the performance.</p>
+                </div>
+                <div class="who-grid">
+                    <div class="who-card reveal">
+                        <h3>The Carriers</h3>
+                        <p>Entrepreneurs, founders, and professionals who are used to being the person others rely on. You hold space for everyone—rarely for yourself.</p>
+                    </div>
+                    <div class="who-card reveal">
+                        <h3>The Seekers</h3>
+                        <p>You do not need another productivity strategy. You need space to breathe, reflect, and listen to what has been difficult to hear beneath the noise.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="experience-preview">
+            <div class="container">
+                <div class="section-header reveal">
+                    <h2>The Experience</h2>
+                    <p>A thoughtfully curated day of restoration and reflection.</p>
+                </div>
+                <div class="exp-grid">
+                    <div class="exp-card reveal">
+                        <h4>Hypnosis</h4>
+                        <p>A guided therapeutic session to access deeper internal patterns and create space for new perspectives.</p>
+                    </div>
+                    <div class="exp-card reveal">
+                        <h4>Breathwork</h4>
+                        <p>Release accumulated tension and reconnect with your body through guided breathwork.</p>
+                    </div>
+                    <div class="exp-card reveal">
+                        <h4>Meditation</h4>
+                        <p>Quiet, restorative practice to integrate the day and reconnect with a calmer internal state.</p>
+                    </div>
+                    <div class="exp-card reveal">
+                        <h4>Catering</h4>
+                        <p>Nourishing chef-curated dining by Chef Mous, with refreshments served throughout the day.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="closing">
+            <div class="container-narrow reveal">
+                <h2>You do not need to wait until everything falls apart to make space for yourself.</h2>
+                <p>Step away from the noise for one thoughtfully curated day.</p>
+                <a href="#" class="btn" onclick="openCheckout(event)" style="animation: none; opacity: 1;">Reserve Your Place</a>
+            </div>
+        </section>
+    </div>
+
+    <!-- PAGE: EXPERIENCE -->
+    <div class="page" id="page-experience">
+        <section style="padding-top: 10rem;">
+            <div class="container-narrow section-header reveal">
+                <p class="hero-pretitle">The Details</p>
+                <h2>The Flow of the Day</h2>
+                <p>A gentle rhythm, not a rigid agenda.</p>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-time">9:00 AM</div>
+                    <h4>Arrival</h4>
+                    <p>Welcome refreshments, settling into the space, and time to arrive without rushing.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">9:30 AM</div>
+                    <h4>Opening Circle</h4>
+                    <p>An introduction to the retreat, the intention for the day, and a grounded conversation about the person behind the entrepreneur.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">10:15 AM</div>
+                    <h4>Guided Hypnosis Experience</h4>
+                    <p>A deeper inward session designed to create calm, clarity, and emotional awareness.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">12:00 PM</div>
+                    <h4>Chef-Curated Lunch</h4>
+                    <p>A nourishing meal prepared by Chef Mous, followed by time to rest, connect, or enjoy the venue.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">1:30 PM</div>
+                    <h4>Breathwork Workshop</h4>
+                    <p>A guided breathwork experience focused on releasing tension and reconnecting with the body.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">3:00 PM</div>
+                    <h4>Quiet Integration</h4>
+                    <p>Journaling, reflection, refreshments, and optional wellness amenities.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">3:45 PM</div>
+                    <h4>Guided Meditation</h4>
+                    <p>A restorative closing practice to help integrate the experience and prepare to return to everyday life with greater steadiness.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">4:30 PM</div>
+                    <h4>Closing Conversation</h4>
+                    <p>Reflections, next steps, and a thoughtful conclusion to the day.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">5:00 PM</div>
+                    <h4>Departure</h4>
+                    <p>Leave without rushing—with space to carry the experience forward.</p>
+                </div>
+            </div>
+
+            <p style="text-align: center; color: var(--gray); font-size: 0.9rem; margin-top: 2rem; font-style: italic;">The schedule may evolve slightly to protect the natural rhythm of the day.</p>
+        </section>
+
+        <section style="background: var(--white);">
+            <div class="container">
+                <div class="section-header reveal">
+                    <h2>What Is Included</h2>
+                </div>
+                <div class="included-grid">
+                    <div class="included-item"><p>Full access to the private retreat venue</p></div>
+                    <div class="included-item"><p>Guided hypnosis experience</p></div>
+                    <div class="included-item"><p>Breathwork workshop</p></div>
+                    <div class="included-item"><p>Meditation and integration session</p></div>
+                    <div class="included-item"><p>Chef-curated lunch by Chef Mous</p></div>
+                    <div class="included-item"><p>Snacks and refreshments throughout the day</p></div>
+                    <div class="included-item"><p>Wellness amenities</p></div>
+                    <div class="included-item"><p>Reflection materials</p></div>
+                    <div class="included-item"><p>Curated welcome gift</p></div>
+                    <div class="included-item"><p>Professional photography and retreat moments</p></div>
+                </div>
+            </div>
+        </section>
+
+        <div class="quote-break">
+            <div class="quote-break-content reveal">
+                <h2>You spend so much time carrying what comes next.<br>For one day, you do not have to.</h2>
+            </div>
+        </div>
+
+        <section class="leave-with">
+            <div class="container">
+                <div class="section-header reveal">
+                    <h2>What You May Leave With</h2>
+                    <p>Not a completely different life by the end of the day. Something quieter—and more useful.</p>
+                </div>
+                <div class="leave-grid">
+                    <div class="leave-item reveal"><p>A clearer understanding of what you have been carrying.</p></div>
+                    <div class="leave-item reveal"><p>A calmer relationship with your own thoughts.</p></div>
+                    <div class="leave-item reveal"><p>A greater awareness of your emotional patterns.</p></div>
+                    <div class="leave-item reveal"><p>A renewed connection to your body and breath.</p></div>
+                    <div class="leave-item reveal"><p>Permission to lead without abandoning yourself.</p></div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- PAGE: INVESTMENT -->
+    <div class="page" id="page-investment">
+        <section style="padding-top: 10rem;">
+            <div class="container-narrow section-header reveal">
+                <p class="hero-pretitle">Investment</p>
+                <h2>Your Place at the Retreat</h2>
+            </div>
+
+            <div class="investment-card reveal" id="booking-section">
+                <p style="letter-spacing: 3px; text-transform: uppercase; font-size: 0.8rem; color: var(--gray);">Complete Experience</p>
+                <div class="price">$299 CAD</div>
+                <p class="price-note">Includes the complete retreat experience, all facilitated sessions, chef-curated catering, refreshments, wellness amenities, and your welcome gift.</p>
+                <p style="font-size: 0.85rem; color: var(--sage); margin-bottom: 2rem; font-weight: 500;">Limited to 12–20 participants</p>
+                <a href="#" class="btn" onclick="openCheckout(event)" style="animation: none; opacity: 1;">Reserve Your Place</a>
+                <p style="margin-top: 1.5rem; font-size: 0.8rem; color: var(--gray);">Secure your place with a deposit</p>
+            </div>
+
+            <div class="testimonial reveal">
+                <p>I arrived feeling like I had been carrying everything alone. I left feeling lighter, clearer, and more connected to myself than I had in months.</p>
+                <cite>— Retreat Participant</cite>
+            </div>
+        </section>
+
+        <section style="background: var(--white);">
+            <div class="container-narrow" style="padding: 0 2rem;">
+                <div class="section-header reveal">
+                    <h2>Frequently Asked Questions</h2>
+                </div>
+                <div class="faq">
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            Is this therapy?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>The retreat includes guided wellness and reflective experiences, but it is not a replacement for individual medical or psychological care. Each facilitator will work within the boundaries of their professional practice.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            Do I need experience with hypnosis, breathwork, or meditation?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>No previous experience is required. Every session will be introduced and guided in a clear, accessible way.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            Is hypnosis safe?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Participants remain aware and in control throughout the experience. You will never be forced to disclose, experience, or do anything against your will.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            Is food included?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Yes. Chef Mous will provide the main meal, with refreshments and light snacks available throughout the day.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            What should I bring?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Comfortable clothing, an open mind, and anything personal that helps you feel grounded. All retreat materials will be provided.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            Can I attend alone?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Yes. Most participants may arrive individually. The day is designed to feel welcoming without forcing networking or group participation.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            What is the cancellation policy?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Your cancellation and transfer policy should be stated clearly here before tickets go on sale.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="closing">
+            <div class="container-narrow reveal">
+                <h2>Return with greater clarity, steadiness, and connection to the person behind everything you have built.</h2>
+                <p>[Date] · RECESS, Montréal</p>
+                <a href="#" class="btn" onclick="openCheckout(event)" style="animation: none; opacity: 1;">Reserve Your Place</a>
+            </div>
+        </section>
+    </div>
+
+    <!-- PAGE: ABOUT -->
+    <div class="page" id="page-about">
+        <div class="about-hero">
+            <div class="reveal">
+                <p class="hero-pretitle" style="color: var(--taupe);">About</p>
+                <h1>Ensidor</h1>
+            </div>
+        </div>
+
+        <div class="about-content">
+            <p class="lead reveal">Leadership retreats for high-performing entrepreneurs who privately question why success does not feel the way they expected.</p>
+            
+            <div class="divider"></div>
+            
+            <p class="reveal">We create spaces where achievement and stillness can coexist. Where the person behind the performance is finally given room to breathe, reflect, and reconnect.</p>
+            
+            <p class="reveal">Our retreats are intentionally small, meticulously curated, and designed for those who carry a great deal—offering a rare pause in the relentless rhythm of leadership.</p>
+
+            <div class="contact-info reveal">
+                <h3>Get in Touch</h3>
+                <p class="contact-detail">For questions about the retreat, private bookings, or partnerships.</p>
+                <p class="contact-detail" style="margin-top: 1.5rem;">
+                    <strong>Email:</strong> hello@ensidor.com<br>
+                    <strong>Location:</strong> RECESS, Montréal
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 Ensidor. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // ==================== CONFIG — EDIT THIS ====================
+        // Your live Stripe Payment Link (the buy.stripe.com URL)
+        const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/YOUR_LINK_HERE';
+        // ===============================================================
+        // Note: Formspree is only called from success.html, after payment.
+        // Nothing is submitted here — this page just saves the booking
+        // locally and hands the customer off to Stripe.
+
+        // Navigation & Routing
+        function navigateTo(pageId, callback) {
+            document.body.className = document.body.className.replace(/page-\w+/g, '').trim();
+            document.body.classList.add('page-' + pageId);
+
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById('page-' + pageId).classList.add('active');
+            
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if(link.dataset.page === pageId) link.classList.add('active');
+            });
+            
+            window.scrollTo(0, 0);
+            if (callback && typeof callback === 'function') setTimeout(callback, 100);
+        }
+
+        function handleHash() {
+            const hash = window.location.hash.replace('#', '') || 'home';
+            navigateTo(hash);
+        }
+
+        window.addEventListener('hashchange', handleHash);
+        window.addEventListener('load', handleHash);
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
+        });
+
+        // Mobile menu
+        function toggleMenu() {
+            document.getElementById('mobileMenu').classList.toggle('open');
+        }
+
+        // FAQ Accordion
+        function toggleFaq(button) {
+            const item = button.parentElement;
+            const isOpen = item.classList.contains('open');
+            document.querySelectorAll('.faq-item').forEach(faq => faq.classList.remove('open'));
+            if (!isOpen) item.classList.add('open');
+        }
+
+        // Reserve / Booking Logic
+        function goToBooking(e) {
+            e.preventDefault();
+            const currentPage = document.querySelector('.page.active').id;
+            if (currentPage === 'page-investment') {
+                scrollToBooking(e);
+            } else {
+                navigateTo('investment', () => {
+                    const el = document.getElementById('booking-section');
+                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                });
+            }
+        }
+
+        function scrollToBooking(e) {
+            if (e) e.preventDefault();
+            const el = document.getElementById('booking-section');
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // ==================== CHECKOUT MODAL ====================
+        const modal = document.getElementById('checkoutModal');
+        const step1 = document.getElementById('checkoutStep1');
+        const step2 = document.getElementById('checkoutStep2');
+
+        function openCheckout(e) {
+            if (e) e.preventDefault();
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+            // Reset to step 1
+            step1.style.display = 'block';
+            step2.style.display = 'none';
+            // Clear previous errors
+            document.querySelectorAll('.form-group').forEach(g => g.classList.remove('has-error'));
+            document.getElementById('submitErrorBanner').classList.remove('show');
+        }
+
+        function closeCheckout() {
+            modal.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function closeModalOnBackdrop(e) {
+            if (e.target === modal) closeCheckout();
+        }
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('open')) closeCheckout();
+        });
+
+        function validateStep1() {
+            let valid = true;
+            const fields = [
+                { id: 'cName', type: 'text' },
+                { id: 'cEmail', type: 'email' },
+                { id: 'cPhone', type: 'text' },
+                { id: 'cAddress', type: 'text' },
+                { id: 'cCity', type: 'text' },
+                { id: 'cProvince', type: 'text' },
+                { id: 'cPostal', type: 'text' },
+                { id: 'cCountry', type: 'text' },
+                { id: 'cReferral', type: 'select' }
+            ];
+
+            fields.forEach(field => {
+                const el = document.getElementById(field.id);
+                const group = el.closest('.form-group');
+                let fieldValid = true;
+
+                if (field.type === 'email') {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    fieldValid = emailRegex.test(el.value.trim());
+                } else if (field.type === 'select') {
+                    fieldValid = el.value !== '';
+                } else {
+                    fieldValid = el.value.trim() !== '';
+                }
+
+                if (!fieldValid) {
+                    group.classList.add('has-error');
+                    valid = false;
+                } else {
+                    group.classList.remove('has-error');
+                }
+            });
+
+            // Checkboxes
+            ['cCancel', 'cTerms', 'cParticipant'].forEach(id => {
+                const el = document.getElementById(id);
+                const group = el.closest('.checkbox-group');
+                if (!el.checked) {
+                    group.style.color = 'var(--error)';
+                    valid = false;
+                } else {
+                    group.style.color = '';
+                }
+            });
+
+            return valid;
+        }
+
+        function goToStep2() {
+            if (!validateStep1()) return;
+            step1.style.display = 'none';
+            step2.style.display = 'block';
+            // Scroll modal to top
+            document.querySelector('.modal').scrollTop = 0;
+        }
+
+        function goToStep1() {
+            step2.style.display = 'none';
+            step1.style.display = 'block';
+            document.querySelector('.modal').scrollTop = 0;
+        }
+
+        // Clear checkbox error styling on change
+        document.querySelectorAll('.checkbox-group input').forEach(cb => {
+            cb.addEventListener('change', function() {
+                this.closest('.checkbox-group').style.color = '';
+            });
+        });
+
+        // Clear input errors on input
+        document.querySelectorAll('#checkoutForm input, #checkoutForm select, #checkoutForm textarea').forEach(input => {
+            input.addEventListener('input', function() {
+                this.closest('.form-group')?.classList.remove('has-error');
+            });
+        });
+
+        // ==================== FORMSPREE + STRIPE HANDOFF ====================
+
+        // Collect all checkout form fields into a plain object
+        function collectBookingData() {
+            const form = document.getElementById('checkoutForm');
+            const fd = new FormData(form);
+            const data = {};
+            fd.forEach((value, key) => { data[key] = value; });
+            data.agreeCancel = document.getElementById('cCancel').checked ? 'Yes' : 'No';
+            data.agreeTerms = document.getElementById('cTerms').checked ? 'Yes' : 'No';
+            data.agreeParticipant = document.getElementById('cParticipant').checked ? 'Yes' : 'No';
+            return data;
+        }
+
+        // Generate a short, unique reference ID to correlate the "started"
+        // and "completed" Formspree entries for the same booking.
+        function generateReference() {
+            return 'ENS-' + Date.now().toString(36).toUpperCase() + '-' +
+                   Math.random().toString(36).slice(2, 7).toUpperCase();
+        }
+
+        function proceedToPayment() {
+            const btn = document.getElementById('continueToPaymentBtn');
+            btn.disabled = true;
+            btn.textContent = 'Redirecting…';
+
+            const booking = collectBookingData();
+            const reference = generateReference();
+            booking.reference = reference;
+            booking.event = 'Ensidor Leadership Retreat — Sunday, September 20, 2026';
+            booking.price = '$299 CAD';
+            booking.startedAt = new Date().toISOString();
+
+            // Save locally so success.html can retrieve these details after
+            // the customer returns from Stripe and submit the single,
+            // complete Formspree entry (with confirmed payment status).
+            try {
+                localStorage.setItem('ensidor_pending_booking', JSON.stringify(booking));
+            } catch (e) {
+                console.warn('Could not persist booking to localStorage:', e);
+            }
+
+            // Build the Stripe URL with identifiers attached so your client
+            // can match the payment to this booking in the Stripe dashboard.
+            const stripeUrl = new URL(STRIPE_PAYMENT_LINK);
+            stripeUrl.searchParams.set('client_reference_id', reference);
+            if (booking.email) stripeUrl.searchParams.set('prefilled_email', booking.email);
+
+            window.location.href = stripeUrl.toString();
+        }
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal, .timeline-item').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
