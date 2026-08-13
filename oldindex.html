@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ensidor — Leadership Retreat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cream: #F7F5F0;
+            --white: #FFFFFF;
+            --charcoal: #2C2C2C;
+            --sage: #6B7F5E;
+            --sage-light: #E8EDE5;
+            --taupe: #B8956A;
+            --taupe-light: #F0E6D6;
+            --gray: #6B6B6B;
+            --light-gray: #E5E5E5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            color: var(--charcoal);
+            background-color: var(--cream);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 400;
+            line-height: 1.2;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1.5rem 3rem;
+            transition: all 0.5s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav.scrolled {
+            background: rgba(247, 245, 240, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 3rem;
+            box-shadow: 0 1px 20px rgba(0,0,0,0.05);
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 500;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--charcoal);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--charcoal);
+            font-size: 0.85rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            position: relative;
+            padding-bottom: 4px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--sage);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: var(--sage);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 24px;
+            height: 1px;
+            background: var(--charcoal);
+            margin: 6px 0;
+            transition: 0.3s;
+        }
+
+        /* Page Container */
+        .page {
+            display: none;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--sage-light) 100%);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236B7F5E' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+        }
+
+        .hero-pretitle {
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--sage);
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: slideUp 0.8s ease forwards 0.2s;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 300;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: slideUp 0.8s ease forwards 0.4s;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: var(--gray);
+            margin-bottom: 2rem;
+            font-weight: 300;
+            opacity: 0;
+            animation: slideUp 0.8s ease forwards 0.6s;
+        }
+
+        .hero-meta {
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            color: var(--gray);
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            animation: slideUp 0.8s ease forwards 0.8s;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: var(--charcoal);
+            color: var(--white);
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border: 1px solid var(--charcoal);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            opacity: 0;
+            animation: slideUp 0.8s ease forwards 1s;
+        }
+
+        .btn:hover {
+            background: transparent;
+            color: var(--charcoal);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--charcoal);
+            margin-left: 1rem;
+        }
+
+        .btn-outline:hover {
+            background: var(--charcoal);
+            color: var(--white);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Sections */
+        section {
+            padding: 6rem 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 1rem;
+            font-weight: 400;
+        }
+
+        .section-header p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .divider {
+            width: 40px;
+            height: 1px;
+            background: var(--taupe);
+            margin: 2rem auto;
+        }
+
+        /* Opening Section */
+        .opening {
+            background: var(--white);
+            padding: 6rem 2rem;
+        }
+
+        .opening-content {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .opening-content p {
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 300;
+            line-height: 1.6;
+            color: var(--charcoal);
+        }
+
+        /* Who Is It For */
+        .who-for {
+            background: var(--cream);
+        }
+
+        .who-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .who-card {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .who-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--sage);
+        }
+
+        .who-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Experience Preview */
+        .experience-preview {
+            background: var(--white);
+        }
+
+        .exp-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .exp-card {
+            padding: 2.5rem 2rem;
+            border: 1px solid var(--light-gray);
+            text-align: center;
+            transition: all 0.4s ease;
+            background: var(--white);
+        }
+
+        .exp-card:hover {
+            border-color: var(--sage);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        }
+
+        .exp-card h4 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .exp-card p {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            max-width: 700px;
+            margin: 4rem auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: var(--light-gray);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 3rem;
+            padding-bottom: 3rem;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.6s ease;
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -5px;
+            top: 0.5rem;
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            background: var(--sage);
+            border: 2px solid var(--cream);
+        }
+
+        .timeline-time {
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--taupe);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .timeline-item h4 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-item p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Included Grid */
+        .included-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .included-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: var(--cream);
+        }
+
+        .included-item::before {
+            content: '—';
+            color: var(--sage);
+            font-weight: 500;
+            line-height: 1.7;
+        }
+
+        .included-item p {
+            font-size: 0.95rem;
+        }
+
+        /* Quote Break */
+        .quote-break {
+            background: var(--charcoal);
+            color: var(--white);
+            padding: 8rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quote-break::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(107,127,94,0.1) 0%, transparent 70%);
+        }
+
+        .quote-break-content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .quote-break h2 {
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-weight: 300;
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        /* Leave With */
+        .leave-with {
+            background: var(--white);
+        }
+
+        .leave-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .leave-item {
+            padding: 2rem;
+            border-left: 2px solid var(--sage-light);
+            transition: all 0.3s ease;
+        }
+
+        .leave-item:hover {
+            border-left-color: var(--sage);
+            background: var(--cream);
+        }
+
+        .leave-item p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.25rem;
+            font-weight: 400;
+        }
+
+        /* Investment */
+        .investment-card {
+            max-width: 500px;
+            margin: 3rem auto;
+            padding: 3rem;
+            border: 1px solid var(--light-gray);
+            text-align: center;
+            background: var(--white);
+        }
+
+        .price {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5rem;
+            font-weight: 400;
+            color: var(--charcoal);
+            margin: 1rem 0;
+        }
+
+        .price-note {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+
+        /* Testimonial */
+        .testimonial {
+            background: var(--sage-light);
+            padding: 4rem;
+            max-width: 700px;
+            margin: 4rem auto;
+            text-align: center;
+            position: relative;
+        }
+
+        .testimonial::before {
+            content: '"';
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 6rem;
+            color: var(--sage);
+            opacity: 0.3;
+            position: absolute;
+            top: 1rem;
+            left: 2rem;
+            line-height: 1;
+        }
+
+        .testimonial p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-style: italic;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial cite {
+            font-style: normal;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gray);
+        }
+
+        /* FAQ */
+        .faq {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--light-gray);
+            margin-bottom: 0;
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 1.5rem 0;
+            background: none;
+            border: none;
+            text-align: left;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--charcoal);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: color 0.3s;
+        }
+
+        .faq-question:hover {
+            color: var(--sage);
+        }
+
+        .faq-icon {
+            font-size: 1.5rem;
+            font-weight: 300;
+            transition: transform 0.3s ease;
+            color: var(--taupe);
+        }
+
+        .faq-item.open .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 300px;
+            padding-bottom: 1.5rem;
+        }
+
+        .faq-answer p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* Closing CTA */
+        .closing {
+            background: linear-gradient(135deg, var(--sage-light) 0%, var(--cream) 100%);
+            text-align: center;
+            padding: 8rem 2rem;
+        }
+
+        .closing h2 {
+            font-size: clamp(1.75rem, 3vw, 2.5rem);
+            margin-bottom: 1.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .closing p {
+            color: var(--gray);
+            margin-bottom: 2.5rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* About Page */
+        .about-hero {
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--charcoal);
+            color: var(--white);
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .about-hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+        }
+
+        .about-content {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 6rem 2rem;
+        }
+
+        .about-content p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: var(--gray);
+        }
+
+        .about-content p.lead {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            color: var(--charcoal);
+            font-weight: 400;
+        }
+
+        .contact-info {
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .contact-info h3 {
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-detail {
+            margin-bottom: 0.75rem;
+            color: var(--gray);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--charcoal);
+            color: var(--white);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        footer p {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            letter-spacing: 1px;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--cream);
+            z-index: 999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .mobile-menu.open {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            color: var(--charcoal);
+            text-decoration: none;
+        }
+
+        .close-menu {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--charcoal);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            section {
+                padding: 4rem 1.5rem;
+            }
+
+            .testimonial {
+                padding: 3rem 1.5rem;
+            }
+
+            .investment-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .btn-outline {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+        }
+
+        /* Scroll reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <a href="#home" class="logo">Ensidor</a>
+        <ul class="nav-links">
+            <li><a href="#home" class="nav-link active" data-page="home">Home</a></li>
+            <li><a href="#experience" class="nav-link" data-page="experience">Experience</a></li>
+            <li><a href="#investment" class="nav-link" data-page="investment">Investment</a></li>
+            <li><a href="#about" class="nav-link" data-page="about">About</a></li>
+        </ul>
+        <button class="mobile-menu-btn" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="close-menu" onclick="toggleMenu()">×</button>
+        <a href="#home" onclick="toggleMenu()">Home</a>
+        <a href="#experience" onclick="toggleMenu()">Experience</a>
+        <a href="#investment" onclick="toggleMenu()">Investment</a>
+        <a href="#about" onclick="toggleMenu()">About</a>
+    </div>
+
+    <!-- PAGE: HOME -->
+    <div class="page active" id="page-home">
+        <section class="hero">
+            <div class="hero-content">
+                <p class="hero-pretitle">Ensidor Presents</p>
+                <h1>The Retreat</h1>
+                <p class="hero-subtitle">One day to step away from the pressure—and return with greater clarity.</p>
+                <p class="hero-meta">[Date] · RECESS, Montréal · 9:00 AM–5:00 PM</p>
+                <a href="#investment" class="btn" onclick="navigateTo('investment')">Reserve Your Place</a>
+            </div>
+        </section>
+
+        <section class="opening">
+            <div class="opening-content reveal">
+                <p>You may be succeeding on the outside while privately feeling stretched, disconnected, or unable to slow down.</p>
+                <div class="divider"></div>
+                <p>This one-day retreat offers a quiet interruption—a space to regulate your nervous system, reconnect with yourself, and experience what leadership can feel like without constant pressure.</p>
+            </div>
+        </section>
+
+        <section class="who-for">
+            <div class="section-header reveal">
+                <h2>Who This Is For</h2>
+                <p>For the person behind the performance.</p>
+            </div>
+            <div class="who-grid">
+                <div class="who-card reveal">
+                    <h3>The Carriers</h3>
+                    <p>Entrepreneurs, founders, and professionals who are used to being the person others rely on. You hold space for everyone—rarely for yourself.</p>
+                </div>
+                <div class="who-card reveal">
+                    <h3>The Seekers</h3>
+                    <p>You do not need another productivity strategy. You need space to breathe, reflect, and listen to what has been difficult to hear beneath the noise.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="experience-preview">
+            <div class="section-header reveal">
+                <h2>The Experience</h2>
+                <p>A thoughtfully curated day of restoration and reflection.</p>
+            </div>
+            <div class="exp-grid">
+                <div class="exp-card reveal">
+                    <h4>Hypnosis</h4>
+                    <p>A guided therapeutic session to access deeper internal patterns and create space for new perspectives.</p>
+                </div>
+                <div class="exp-card reveal">
+                    <h4>Breathwork</h4>
+                    <p>Release accumulated tension and reconnect with your body through guided breathwork.</p>
+                </div>
+                <div class="exp-card reveal">
+                    <h4>Meditation</h4>
+                    <p>Quiet, restorative practice to integrate the day and reconnect with a calmer internal state.</p>
+                </div>
+                <div class="exp-card reveal">
+                    <h4>Catering</h4>
+                    <p>Nourishing chef-curated dining by Chef Mous, with refreshments served throughout the day.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="closing">
+            <div class="reveal">
+                <h2>You do not need to wait until everything falls apart to make space for yourself.</h2>
+                <p>Step away from the noise for one thoughtfully curated day.</p>
+                <a href="#investment" class="btn" onclick="navigateTo('investment')">Reserve Your Place</a>
+            </div>
+        </section>
+    </div>
+
+    <!-- PAGE: EXPERIENCE -->
+    <div class="page" id="page-experience">
+        <section style="padding-top: 10rem;">
+            <div class="section-header reveal">
+                <p class="hero-pretitle">The Details</p>
+                <h2>The Flow of the Day</h2>
+                <p>A gentle rhythm, not a rigid agenda.</p>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-time">9:00 AM</div>
+                    <h4>Arrival</h4>
+                    <p>Welcome refreshments, settling into the space, and time to arrive without rushing.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">9:30 AM</div>
+                    <h4>Opening Circle</h4>
+                    <p>An introduction to the retreat, the intention for the day, and a grounded conversation about the person behind the entrepreneur.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">10:15 AM</div>
+                    <h4>Guided Hypnosis Experience</h4>
+                    <p>A deeper inward session designed to create calm, clarity, and emotional awareness.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">12:00 PM</div>
+                    <h4>Chef-Curated Lunch</h4>
+                    <p>A nourishing meal prepared by Chef Mous, followed by time to rest, connect, or enjoy the venue.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">1:30 PM</div>
+                    <h4>Breathwork Workshop</h4>
+                    <p>A guided breathwork experience focused on releasing tension and reconnecting with the body.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">3:00 PM</div>
+                    <h4>Quiet Integration</h4>
+                    <p>Journaling, reflection, refreshments, and optional wellness amenities.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">3:45 PM</div>
+                    <h4>Guided Meditation</h4>
+                    <p>A restorative closing practice to help integrate the experience and prepare to return to everyday life with greater steadiness.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">4:30 PM</div>
+                    <h4>Closing Conversation</h4>
+                    <p>Reflections, next steps, and a thoughtful conclusion to the day.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">5:00 PM</div>
+                    <h4>Departure</h4>
+                    <p>Leave without rushing—with space to carry the experience forward.</p>
+                </div>
+            </div>
+
+            <p style="text-align: center; color: var(--gray); font-size: 0.9rem; margin-top: 2rem; font-style: italic;">The schedule may evolve slightly to protect the natural rhythm of the day.</p>
+        </section>
+
+        <section style="background: var(--white); max-width: 100%;">
+            <div style="max-width: 1000px; margin: 0 auto;">
+                <div class="section-header reveal">
+                    <h2>What Is Included</h2>
+                </div>
+                <div class="included-grid">
+                    <div class="included-item"><p>Full access to the private retreat venue</p></div>
+                    <div class="included-item"><p>Guided hypnosis experience</p></div>
+                    <div class="included-item"><p>Breathwork workshop</p></div>
+                    <div class="included-item"><p>Meditation and integration session</p></div>
+                    <div class="included-item"><p>Chef-curated lunch by Chef Mous</p></div>
+                    <div class="included-item"><p>Snacks and refreshments throughout the day</p></div>
+                    <div class="included-item"><p>Wellness amenities</p></div>
+                    <div class="included-item"><p>Reflection materials</p></div>
+                    <div class="included-item"><p>Curated welcome gift</p></div>
+                    <div class="included-item"><p>Professional photography and retreat moments</p></div>
+                </div>
+            </div>
+        </section>
+
+        <div class="quote-break">
+            <div class="quote-break-content reveal">
+                <h2>You spend so much time carrying what comes next.<br>For one day, you do not have to.</h2>
+            </div>
+        </div>
+
+        <section class="leave-with">
+            <div class="section-header reveal">
+                <h2>What You May Leave With</h2>
+                <p>Not a completely different life by the end of the day. Something quieter—and more useful.</p>
+            </div>
+            <div class="leave-grid">
+                <div class="leave-item reveal">
+                    <p>A clearer understanding of what you have been carrying.</p>
+                </div>
+                <div class="leave-item reveal">
+                    <p>A calmer relationship with your own thoughts.</p>
+                </div>
+                <div class="leave-item reveal">
+                    <p>A greater awareness of your emotional patterns.</p>
+                </div>
+                <div class="leave-item reveal">
+                    <p>A renewed connection to your body and breath.</p>
+                </div>
+                <div class="leave-item reveal">
+                    <p>Permission to lead without abandoning yourself.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- PAGE: INVESTMENT -->
+    <div class="page" id="page-investment">
+        <section style="padding-top: 10rem;">
+            <div class="section-header reveal">
+                <p class="hero-pretitle">Investment</p>
+                <h2>Your Place at the Retreat</h2>
+            </div>
+
+            <div class="investment-card reveal">
+                <p style="letter-spacing: 3px; text-transform: uppercase; font-size: 0.8rem; color: var(--gray);">Complete Experience</p>
+                <div class="price">$299 CAD</div>
+                <p class="price-note">Includes the complete retreat experience, all facilitated sessions, chef-curated catering, refreshments, wellness amenities, and your welcome gift.</p>
+                <p style="font-size: 0.85rem; color: var(--sage); margin-bottom: 2rem; font-weight: 500;">Limited to 12–20 participants</p>
+                <a href="#" class="btn">Reserve Your Place</a>
+                <p style="margin-top: 1.5rem; font-size: 0.8rem; color: var(--gray);">Secure your place with a deposit</p>
+            </div>
+
+            <div class="testimonial reveal">
+                <p>I arrived feeling like I had been carrying everything alone. I left feeling lighter, clearer, and more connected to myself than I had in months.</p>
+                <cite>— Retreat Participant</cite>
+            </div>
+        </section>
+
+        <section style="background: var(--white); max-width: 100%;">
+            <div style="max-width: 700px; margin: 0 auto; padding: 0 2rem;">
+                <div class="section-header reveal">
+                    <h2>Frequently Asked Questions</h2>
+                </div>
+                <div class="faq">
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            Is this therapy>
+                            Do I need experience with hypnosis, breathwork, or meditation?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>No previous experience is required. Every session will be introduced and guided in a clear, accessible way.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            Is hypnosis safe?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Participants remain aware and in control throughout the experience. You will never be forced to disclose, experience, or do anything against your will.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            Is food included?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Yes. Chef Mous will provide the main meal, with refreshments and light snacks available throughout the day.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            What should I bring?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Comfortable clothing, an open mind, and anything personal that helps you feel grounded. All retreat materials will be provided.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            Can I attend alone?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Yes. Most participants may arrive individually. The day is designed to feel welcoming without forcing networking or group participation.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            What is the cancellation policy?
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Your cancellation and transfer policy should be stated clearly here before tickets go on sale.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="closing">
+            <div class="reveal">
+                <h2>Return with greater clarity, steadiness, and connection to the person behind everything you have built.</h2>
+                <p>[Date] · RECESS, Montréal</p>
+                <a href="#" class="btn">Reserve Your Place</a>
+            </div>
+        </section>
+    </div>
+
+    <!-- PAGE: ABOUT -->
+    <div class="page" id="page-about">
+        <div class="about-hero">
+            <div class="reveal">
+                <p class="hero-pretitle" style="color: var(--taupe);">About</p>
+                <h1>Ensidor</h1>
+            </div>
+        </div>
+
+        <div class="about-content">
+            <p class="lead reveal">Leadership retreats for high-performing entrepreneurs who privately question why success does not feel the way they expected.</p>
+            
+            <div class="divider"></div>
+            
+            <p class="reveal">We create spaces where achievement and stillness can coexist. Where the person behind the performance is finally given room to breathe, reflect, and reconnect.</p>
+            
+            <p class="reveal">Our retreats are intentionally small, meticulously curated, and designed for those who carry a great deal—offering a rare pause in the relentless rhythm of leadership.</p>
+
+            <div class="contact-info reveal">
+                <h3>Get in Touch</h3>
+                <p class="contact-detail">For questions about the retreat, private bookings, or partnerships.</p>
+                <p class="contact-detail" style="margin-top: 1.5rem;">
+                    <strong>Email:</strong> hello@ensidor.com<br>
+                    <strong>Location:</strong> RECESS, Montréal
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 Ensidor. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Navigation & Routing
+        function navigateTo(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show target page
+            document.getElementById('page-' + pageId).classList.add('active');
+            
+            // Update nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if(link.dataset.page === pageId) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Hash-based routing
+        function handleHash() {
+            const hash = window.location.hash.replace('#', '') || 'home';
+            navigateTo(hash);
+        }
+
+        window.addEventListener('hashchange', handleHash);
+        window.addEventListener('load', handleHash);
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu
+        function toggleMenu() {
+            document.getElementById('mobileMenu').classList.toggle('open');
+        }
+
+        // FAQ Accordion
+        function toggleFaq(button) {
+            const item = button.parentElement;
+            const isOpen = item.classList.contains('open');
+            
+            // Close all
+            document.querySelectorAll('.faq-item').forEach(faq => {
+                faq.classList.remove('open');
+            });
+            
+            // Open clicked if it was closed
+            if (!isOpen) {
+                item.classList.add('open');
+            }
+        }
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all reveal and timeline elements
+        document.querySelectorAll('.reveal, .timeline-item').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
